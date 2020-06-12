@@ -121,6 +121,26 @@ class Calculator extends React.Component {
       },
 
       ".": () => {
+        let Temp = (displayValue + ".");
+        let ct = 0;
+        let index = -1;
+        
+       //반복문 돌면서 확인 . 더 있나 있으면 count++
+        do  {
+            index = Temp.indexOf('.', index + 1);
+            if (index != -1) { 
+              ct++; 
+            }
+        } while (index != -1);
+
+        if(ct > 1){
+           this.setState({ displayValue: displayValue}); 
+          }
+        else { 
+          this.setState({ displayValue: Temp});
+         }
+        
+
         
         
       },

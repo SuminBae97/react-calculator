@@ -71,6 +71,7 @@ class Calculator extends React.Component {
         }
       },
       "-": () => {
+        //- 구현
         if (lastChar !== "" && !operatorKeys.includes(lastChar)) {
           this.setState({ displayValue: displayValue + "-" });
         }

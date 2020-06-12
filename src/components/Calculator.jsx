@@ -30,13 +30,26 @@ const Box = styled.div`
 
 const evalFunc = function(string) {
   // eslint-disable-next-line no-new-func
+  let first = string.substr(0,1);
+  
+  if(first=="√") {
+    let lapenIndex = string.lastIndexOf(")");
+    let subResult = string.substr(2, lapenIndex-2);
+    subResult = Math.sqrt(evalFunc(subResult));
+    
+    return new Function("return (" + subResult + string.substr(lapenIndex+1,string.length) + ")")();
+  }
+  
   return new Function("return (" + string + ")")();
 };
 
 class Calculator extends React.Component {
   // TODO: history 추가
+  histcount=0;
+
   state = {
-    displayValue: ""
+    displayValue: "",
+    historylist:[]
   };
 
   onClickButton = key => {
@@ -57,6 +70,16 @@ class Calculator extends React.Component {
       },
       // TODO: 제곱근 구현
       "√": () => {
+        if (lastChar !== "" && operatorKeys.includes(lastChar)) {
+          displayValue = displayValue.substr(0, displayValue.length - 1);
+        } 
+        else if (lastChar !== "") {
+          displayValue = displayValue.replace(/×/gi, "*");
+          displayValue = displayValue.replace(/÷/gi, '/');
+          displayValue = Math.sqrt(evalFunc(displayValue));
+
+        }
+        this.setState({ displayValue });
         
       },
       // TODO: 사칙연산 구현
@@ -66,6 +89,7 @@ class Calculator extends React.Component {
         }
       },
       "×": () => {
+
         if (lastChar !== "" && !operatorKeys.includes(lastChar)) {
           this.setState({ displayValue: displayValue + "×" });
         }
